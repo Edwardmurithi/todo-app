@@ -1,6 +1,3 @@
-from todo import *
-
-
 def main():
     pass
 
