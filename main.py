@@ -1,5 +1,8 @@
-def main():
-    pass
+import todo
+from todo import display
 
-if "__name__" == "__main__":
+def main():
+    display()
+    print(todo.tasks)
+if __name__ == "__main__":
     main()
