@@ -1,36 +1,158 @@
-"""
-TODO:
-    Implement function to add  a todo
-    Implement function to update the todo list
-    Implement function to delete a todo
-    Implement function to mark a task as complete
-    Integrate the todo app with postgresQL database for task storage
-    Integrate a display screen
-"""
-tasks = []
+#!/usr/bin/python3
+import sys
+import time
+import os
+import json
 
-def add_task(tasks):
-    print(f"\n{"ADD TASK":*^20}\n")
-    while(True):
-        try:
-            task = input("task: ")
-            if task.lower() == 'q':
-                break
-            elif task == "":
-                print("Enter atleast 4 character todo")
-                continue
-            tasks.append(task)
-        except ValueError as e:
-            print(f"Error: {e}")
+# Global variables
+START = 0
+END = 12
 
-def display():
-    print(f"\n{"WELCOME TO TODO LIST APPLICATION":*^50}\n")
-    print(f"{"1. Add todo task.":>20}")
-    print(f"{"2. Remove a task.":>20}")
-    print(f"{"3. Mark Complete.":>20}")
-    print(f"{"4. Edit the List.":>20}")
-    print(f"{"5. Save and Exit.":>20}\n");
+def load_the_file():
+    """Load tasks from a file and appends a list
+
+    Returns:
+        task_list: list
+    """
+    task_list = []
+
+    # Load tasks from a file
+    FILE_PATH = 'todos_list.txt'
+
+    if os.path.exists(FILE_PATH):
+        with open(FILE_PATH, 'r') as file: 
+            for line in file:
+                task_list.append(line.strip())
+    return task_list
+
+
+def add_todo(todo_list):
+    """Allows use to add an array of todos
+
+    Args:
+        todo_list (list): list to hold user todos
+    """
+    clear_screen()
+    for i in range(END + 1):
+        if i == START or i == END:
+            print("+----------------------------------------------------+")
+        elif todo_list:
+            for idx, task in enumerate(todo_list):
+                if i == 3:
+                    print(f"|   {idx + 1}. {task}")
+        else:
+            print("|                                                    |")
+    while (True):
+        user_todo = input("Enter todo: ").title()
+        if (user_todo == 'Q'):
+            clear_screen()
+            pause_and_return()
+            display_options()
+        todo_list.append(user_todo)
+        # call the add_todo function recusively to update the
+        # list every time a new todo is added
+        add_todo(todo_list)
+
+def remove_todo(todo_list):
+    """function to delete tasks from task list
+
+    Args:
+        todo_list (list): hold user todos
+    """
+    clear_screen()
+    for i in range(END + 1):
+        if i == START or i == END:
+            print("+----------------------------------------------------+")
+        elif todo_list:
+            for idx, task in enumerate(todo_list):
+                if i == 3:
+                    print(f"|   {idx + 1}. {task}")
+        else:
+            print("|                                                    |")
+
+def view_todos(todo_list):
+    pass
+
+def mark_todo_complete(todo_list):
+    pass
+
+
+def exit():
+    clear_screen()
+    print("Exting the application.....")
+    time.sleep(1)
+    sys.exit()
+
+def pause_and_return():
+    """Pause and wait for the user to press return key
+    """
+    input("\nPress Enter to return to main Menu...")
+    clear_screen()
+
+
+def clear_screen():
+    """Uses ASII character codes to clear the screen
+    """
+    sys.stdout.write("\033[H\033[J")
+    sys.stdout.flush()
+
+
+def user_selection():
+    """Prompt user for choice input
+    """
+    todo_list = load_the_file()
+
+    try:
+        user_choice = int(input(f"{"-----Select option: ":>30}"))
+    except:
+        print(f"{"Invalid Input!!":^40}")
+        time.sleep(1)
+        clear_screen()
+        display_options()
+    finally:
+        if user_choice == 1:
+            print(add_todo(todo_list))
+        elif user_choice == 2:
+            pass
+        elif user_choice == 3:
+            view_todos()
+        elif user_choice == 4:
+            mark_todo_complete()
+        elif user_choice == 5:
+            remove_todo()
+        else:
+            exit()
+
     
-    choice = int(input(f"{"Select Option: ":->20}"))
-    if choice == 1:
-        add_task(tasks)
+
+
+
+def display_options():
+    for i in range(END + 1):
+        if i == START or i == END:
+            print("+----------------------------------------------------+")
+        elif i == 3:
+            print("|            WELCOME TO TODO MANAGER                 |")
+        elif i == 5:
+            print("|        1. ➕ ADD New todos                         |")
+        elif i == 6:
+            print("|        2. 📝 EDIT a todo                           |")
+        elif i == 7:
+            print("|        3. 📖 VIEW existing todos                   |")
+        elif i == 8:
+            print("|        4. ✔  Mark a todo COMPLETE                  |")
+        elif i == 9:
+            print("|        5. ❌ DELETE task                           |")
+        elif i == 10:
+            print("|        6. 💾 Save and Quit                         |")
+        else:
+            print("|                                                    |")
+    user_selection()
+
+
+def main():
+    display_options()
+
+
+if __name__ == "__main__":
+    main()
