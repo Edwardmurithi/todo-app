@@ -27,31 +27,26 @@ def load_the_file():
 
 
 def add_todo(todo_list):
-    """Allows use to add an array of todos
-
-    Args:
-        todo_list (list): list to hold user todos
-    """
-    clear_screen()
-    for i in range(END + 1):
-        if i == START or i == END:
-            print("+----------------------------------------------------+")
-        elif todo_list:
-            for idx, task in enumerate(todo_list):
-                if i == 3:
-                    print(f"|   {idx + 1}. {task}")
+    """Allows user to add todos interactively."""
+    while True:
+        clear_screen()
+        print("+----------------------------------------------------+")
+        if todo_list:
+            for idx, task in enumerate(todo_list, start=1):
+                print(f"|   {idx}. {task}")
         else:
-            print("|                                                    |")
-    while (True):
-        user_todo = input("Enter todo: ").title()
-        if (user_todo == 'Q'):
+            print("|   No todos yet.                                    |")
+        print("+----------------------------------------------------+")
+
+        user_todo = input("Enter todo (or Q to quit): ").strip().title()
+        if user_todo == 'Q':
             clear_screen()
             pause_and_return()
             display_options()
-        todo_list.append(user_todo)
-        # call the add_todo function recusively to update the
-        # list every time a new todo is added
-        add_todo(todo_list)
+            break  # Exit loop
+        else:
+            todo_list.append(user_todo)
+
 
 def remove_todo(todo_list):
     """function to delete tasks from task list
