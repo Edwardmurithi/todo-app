@@ -2,11 +2,11 @@
 import sys
 import time
 import os
-import json
 
 # Global variables
 START = 0
 END = 12
+FILE_PATH = 'todos_list.txt'
 
 def load_the_file():
     """Load tasks from a file and appends a list
@@ -17,13 +17,16 @@ def load_the_file():
     task_list = []
 
     # Load tasks from a file
-    FILE_PATH = 'todos_list.txt'
-
     if os.path.exists(FILE_PATH):
         with open(FILE_PATH, 'r') as file: 
             for line in file:
                 task_list.append(line.strip())
     return task_list
+
+def save_todos(todo_list):
+    tasks = todo_list
+            
+
 
 
 def add_todo(todo_list):
@@ -55,15 +58,13 @@ def remove_todo(todo_list):
         todo_list (list): hold user todos
     """
     clear_screen()
-    for i in range(END + 1):
-        if i == START or i == END:
-            print("+----------------------------------------------------+")
-        elif todo_list:
-            for idx, task in enumerate(todo_list):
-                if i == 3:
-                    print(f"|   {idx + 1}. {task}")
+    for idx, task in enumerate(todo_list, start=1):
+        print("+----------------------------------------------------+")
+        if todo_list:
+            print(f"|      {idx}. {task}")
         else:
-            print("|                                                    |")
+            print("|   No todos yet.                                    |")
+        print("+----------------------------------------------------+")
 
 def view_todos(todo_list):
     pass
@@ -110,11 +111,11 @@ def user_selection():
         elif user_choice == 2:
             pass
         elif user_choice == 3:
-            view_todos()
+            view_todos(todo_list)
         elif user_choice == 4:
-            mark_todo_complete()
+            mark_todo_complete(todo_list)
         elif user_choice == 5:
-            remove_todo()
+            remove_todo(todo_list)
         else:
             exit()
 
